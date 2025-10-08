@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Quadra - MAP 4 PLAY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #df8804 0%, #b1b342 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .map-help {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .map-help a {
+            color: #1976d2;
+            font-weight: bold;
+        }
+        .success-message {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .error-message {
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .required {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Adicionar Nova Quadra</h1>
+        <p class="subtitle">Preencha todos os dados da quadra esportiva</p>
+
+        <div class="success-message" id="successMessage">Quadra adicionada!!!!</div>
+        <div class="error-message" id="errorMessage"></div>
+
+        <form id="formQuadra">
+            <!-- INFORMAÇÕES ------------------------------------------------------------------------------------ -->
+            <div class="form-group">
+                <label>Nome da Quadra <span class="required">*</span></label>
+                <input type="text" name="nome_quadra" required placeholder="Ex: Quadra do Parque Ibirapuera">
+            </div>
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea name="descricao" placeholder="Descreva a quadra, suas características e condições..."></textarea>
+            </div>
+
+            <!-- LOCALIZACAO ------------------------------------------------------------------------------------------- -->
+            <div class="form-group">
+                <label>Endereço Completo <span class="required">*</span></label>
+                <input type="text" name="endereco" required placeholder="Ex: Av. Pedro Álvares Cabral, s/n">
+            </div>
+
+            <div class="form-group">
+                <label>Bairro</label>
+                <input type="text" name="bairro" placeholder="Ex: Vila Mariana">
+            </div>
+
+            <div class="form-group">
+                <label>Zona <span class="required">*</span></label>
+                <select name="zona" required>
+                    <option value="">Selecione...</option>
+                    <option value="Zona Leste">Zona Leste</option>
+                    <option value="Zona Oeste">Zona Oeste</option>
+                    <option value="Zona Norte">Zona Norte</option>
+                    <option value="Zona Sul">Zona Sul</option>
+                    <option value="Centro">Centro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>CEP</label>
+                <input type="text" name="cep" placeholder="00000-000" maxlength="9">
+            </div>
+
+            <!-- COORDENADAS --------------------------------------------------------------------------------------- -->
+            <div class="form-group">
+                <label>Latitude <span class="required">*</span></label>
+                <input type="number" name="latitude" step="0.000001" required placeholder="-23.5505">
+                <div class="map-help">
+                    💡 <strong>Dica:</strong> Para obter as coordenadas, acesse 
+                    <a href="https://www.google.com/maps" target="_blank">Google Maps</a>, 
+                    clique com botão direito no local da quadra e copie as coordenadas.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Longitude <span class="required">*</span></label>
+                <input type="number" name="longitude" step="0.000001" required placeholder="-46.6333">
+            </div>
+
+            <!-- TIPO DE ESPORTE ------------------------------------------------------------------------- -->
+            <div class="form-group">
+                <label>Tipo de Esporte <span class="required">*</span></label>
+                <select name="tipo_esporte" required>
+                    <option value="">Selecione...</option>
+                    <option value="Futebol">Futebol</option>
+                    <option value="Basquete">Basquete</option>
+                    <option value="Vôlei">Vôlei</option>
+                    <option value="Tênis">Tênis</option>
+                    <option value="Futsal">Futsal</option>
+                    <option value="Poliesportiva">Poliesportiva</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </div>
+
+            <!-- CARACTRISTICAS ---------------------------------------------------------------- -->
+            <div class="form-group">
+                <label>Características da Quadra</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="acessivel" id="acessivel">
+                        <label for="acessivel" style="margin: 0;">Acessível para PcD</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="tem_rampa" id="tem_rampa">
+                        <label for="tem_rampa" style="margin: 0;">Possui Rampa</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="tem_banheiro_adaptado" id="tem_banheiro">
+                        <label for="tem_banheiro" style="margin: 0;">Banheiro Adaptado</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="tem_iluminacao" id="tem_iluminacao">
+                        <label for="tem_iluminacao" style="margin: 0;">Iluminação</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="tem_vestiario" id="tem_vestiario">
+                        <label for="tem_vestiario" style="margin: 0;">Vestiário</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="tem_arquibancada" id="tem_arquibancada">
+                        <label for="tem_arquibancada" style="margin: 0;">Arquibancada</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="cobertura" id="cobertura">
+                        <label for="cobertura" style="margin: 0;">Cobertura</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LINK DA FOTO ------------------------------------------------------------------------- -->
+            <div class="form-group">
+                <label>URL da Foto</label>
+                <input type="text" name="link_foto" placeholder="https://exemplo.com/foto.jpg">
+            </div>
+
+            <!-- BOTOES --------------------------------------------------------------------------------------- -->
+            <div class="btn-container">
+                <button type="button" class="btn-secondary" onclick="limparFormulario()">Limpar</button>
+                <button type="submit" class="btn-primary">Adicionar Quadra</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('formQuadra').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            //LOADING STATE  BOTAO DESABILITADO
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '⏳ Salvando...';
+            
+            const formData = new FormData(this);
+            
+            // CONVERETE CHECKBOXES PARA BOOLEANOS
+            const checkboxes = ['acessivel', 'tem_rampa', 'tem_banheiro_adaptado', 'tem_iluminacao', 'tem_vestiario', 'tem_arquibancada', 'cobertura'];
+            checkboxes.forEach(name => {
+                formData.set(name, formData.get(name) ? 'true' : 'false');
+            });
+
+            fetch('salvar_quadra.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                //RESTAURA O BOTAO NO SUCESSO
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                
+                if (data.sucesso) {
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('errorMessage').style.display = 'none';
+                    limparFormulario();
+                    
+                    //ESCONDE A MSG APOS 3 SEGUNDOS 
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 3000);
+                } else {
+                    document.getElementById('errorMessage').textContent = ' ' + data.mensagem;
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('successMessage').style.display = 'none';
+                }
+            })
+            .catch(error => {
+                //RESTAURA O BOTAO NO ERRO
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+                
+                document.getElementById('errorMessage').textContent = 'Erro ao adicionar quadra: ' + error;
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+            });
+        });
+
+        function limparFormulario() {
+            document.getElementById('formQuadra').reset();
+        }
+
+        // MASCARA PARA O CEP
+        document.querySelector('input[name="cep"]').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '-' + value.substring(5, 8);
+            }
+            e.target.value = value;
+        });
+
+        // FUNCAO PARA VALIDAR SO O QUE ESTA DENTRO DE SP CAPITAL 
+        function validarCoordenadas(lat, lng) {
+            // LIMITES APROXIMADOS DE SP CAPITAL  ( CONFERIR ESSA PARADA)
+            const minLat = -24.0;
+            const maxLat = -23.0;
+            const minLng = -47.0;
+            const maxLng = -46.0;
+    
+            return lat >= minLat && lat <= maxLat && lng >= minLng && lng <= maxLng;
+        }
+
+        // validacao em tempo real para as coordenadas e tal
+        document.querySelector('input[name="latitude"]').addEventListener('blur', function(e) {
+            const lat = parseFloat(e.target.value);
+            if (!validarCoordenadas(lat, 0)) {
+                alert('Latitude fora do range de São Paulo. Use valores entre -24.0 e -23.0');
+                e.target.focus();
+            }
+        });
+
+        document.querySelector('input[name="longitude"]').addEventListener('blur', function(e) {
+            const lng = parseFloat(e.target.value);
+            if (!validarCoordenadas(0, lng)) {
+                alert('Longitude fora do range de São Paulo. Use valores entre -47.0 e -46.0');
+                e.target.focus();
+            }
+        });
+
+        // validacao de tudo antes do envio
+        document.getElementById('formQuadra').addEventListener('submit', function(e) {
+            const lat = parseFloat(document.querySelector('input[name="latitude"]').value);
+            const lng = parseFloat(document.querySelector('input[name="longitude"]').value);
+            
+            if (!validarCoordenadas(lat, lng)) {
+                e.preventDefault();
+                alert('Coordenadas fora da área de São Paulo, vc tem que verificar a latitude e longitude.');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
