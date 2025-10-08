@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadras - MAP 4 PLAY</title>
+    <style>
+        .filtros-zona {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .filtros-zona button {
+            margin: 5px;
+            padding: 10px 20px;
+            background: #f6815e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header_section">
+    </div>
+
+    <div class="service_section layout_padding">
+        <div class="container">
+            <h1 class="service_taital">Quadras Esportivas em São Paulo</h1>
+            
+            <div class="filtros-zona">
+                <button onclick="filtrarPorZona('todas')" class="active">Todas as Zonas</button>
+                <button onclick="filtrarPorZona('Zona Leste')">Zona Leste</button>
+                <button onclick="filtrarPorZona('Zona Oeste')">Zona Oeste</button>
+                <button onclick="filtrarPorZona('Zona Norte')">Zona Norte</button>
+                <button onclick="filtrarPorZona('Zona Sul')">Zona Sul</button>
+                <button onclick="filtrarPorZona('Centro')">Centro</button>
+            </div>
+
+            <div class="service_section_2 layout_padding">
+                <div class="owl-carousel owl-theme" id="quadras-carousel">
+                    <div class="item" style="text-align: center; padding: 50px;">
+                        <p>Carregando quadras...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let todasQuadras = [];
+    let zonaAtual = 'todas';
+
+    function carregarQuadras(zona = 'todas') {
+        // DADOS FICTÍCIOS PARA TESTE ------------------------------------------------------------
+        const quadrasTeste = [
+            {
+                id: 1,
+                nome_quadra: "Quadra do Parque Ibirapuera",
+                descricao: "Quadra poliesportiva com iluminação noturna",
+                endereco: "Av. Pedro Álvares Cabral, s/n",
+                bairro: "Vila Mariana",
+                zona: "Zona Sul",
+                tipo_esporte: "Poliesportiva",
+                acessivel: true,
+                tem_iluminacao: true,
+                tem_vestiario: true,
+                link_foto: "images/quadra-default.jpg"
+            },
+            {
+                id: 2,
+                nome_quadra: "Quadra do Parque Villa-Lobos",
+                descricao: "Quadra de basquete com arquibancada",
+                endereco: "Av. Prof. Fonseca Rodrigues, 2001",
+                bairro: "Alto de Pinheiros",
+                zona: "Zona Oeste",
+                tipo_esporte: "Basquete",
+                acessivel: true,
+                tem_iluminacao: true,
+                tem_vestiario: false,
+                link_foto: "images/quadra-default.jpg"
+            },
+            {
+                id: 3,
+                nome_quadra: "Quadra da Aclimação",
+                descricao: "Quadra de futebol society",
+                endereco: "R. Muniz de Sousa, 1119",
+                bairro: "Aclimação",
+                zona: "Centro",
+                tipo_esporte: "Futebol",
+                acessivel: false,
+                tem_iluminacao: true,
+                tem_vestiario: true,
+                link_foto: "images/quadra-default.jpg"
+            }
+        ];
+
+        let quadrasFiltradas = quadrasTeste;
+        if (zona !== 'todas') {
+            quadrasFiltradas = quadrasTeste.filter(q => q.zona === zona);
+        }
+
+        todasQuadras = quadrasFiltradas;
+        exibirQuadras(quadrasFiltradas);
+    }
+
+    </script>
+    <script src="js/jquery.min.js"></script>
+</body>
+</html>
